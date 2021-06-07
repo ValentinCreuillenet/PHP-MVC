@@ -2,8 +2,8 @@
 
 interface RepositoryInterface
 {
-    public function getAll(): array;
-    public function getAllBy($args): array;
+    public function getAll($collection): array;
+    public function getAllBy($collection, $id): array;
 
 }
 

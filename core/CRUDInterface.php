@@ -6,7 +6,6 @@ interface CRUDInterface
     public function retrieve($id): self;
     public function update($id): bool;
     public function delete($id): bool;
-
 }
 
 ?>
