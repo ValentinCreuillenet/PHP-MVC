@@ -24,18 +24,19 @@ class Routing{
 
         $this->config = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'].'/config/routing.json'),true); 
 
+        $this->uri = explode("/", $_SERVER['REQUEST_URI']);
     }
 
     /**
-     * Méthode qui compare la hauteur de deux tableaux passés en arguments et qui retourne
+     * Méthode qui compare la longeur des deux tableaux $uri et $route et qui retourne
      * true si ils sont égaux et false le cas échéant
-     * @param arr1 Le  premier des tableaux à comparer
-     * @param arr2 Le deuxième des deux tableaux à comparer
      * @return bool true dans le cas ou les deux tableaux on la même longeur, false sinon
      */
-    private function isEqual(array $arr1, array $arr2):bool
+    private function isEqual()
     {
-        return false;
+
+        return (count($this->uri) == count($this->route)) ?  true : false;
+
     }
 
     /**
@@ -58,7 +59,7 @@ class Routing{
      * Cette méthode compare les tableaux $uri et $route
      * @return bool true si les tableau sont identique et false sinon
      */
-    private function compare():bool;
+    private function compare():bool
     {
         return false;
     }
@@ -77,5 +78,13 @@ class Routing{
      */
     public function execute(){
 
+        foreach($this->config as $key => $value){
+
+            $this->route = explode("/", $key);
+
+            if($this->isEqual()){
+                $this->compare();
+            }
+        }
     }
 }
