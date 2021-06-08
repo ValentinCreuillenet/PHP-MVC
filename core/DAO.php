@@ -5,6 +5,8 @@ abstract class DAO implements CRUDInterface, RepositoryInterface{
     protected $pdo;
 
     public function __construct(){
+
+        //On récupère les données du fichier de config pour créer notre PDO
         $database = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'].'/config/database.json'),true);
         $dsn = "{$database['driver']}:dbname={$database['dbname']};host={$database['host']};port={$database['port']}";
         $username = $database['username'];
