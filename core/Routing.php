@@ -10,7 +10,5 @@ class Routing{
 
     }
 
-    public function test(){
-        return $this->config;
-    }
+ 
 }
