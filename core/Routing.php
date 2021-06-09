@@ -70,9 +70,7 @@ class Routing{
 
         $controllerMethod = explode(":", $this->controller)[1];
 
-        $c = new $controllerName();
-
-        $c->{$controllerMethod}($this->args);
+        call_user_func_array(array($controllerName, $controllerMethod), $this->args);
 
     }
 
