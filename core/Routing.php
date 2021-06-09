@@ -2,13 +2,13 @@
 
 class Routing{
 
-    //Fichier JSON qui définit les différents chemin possible et autorisés
+    //Fichier JSON qui définit les différents chemin possible et autorisés et les contrôleur associées
     private $config;
 
-    //Tableau représentant le découpage de l'uri
+    //Tableau représentant le découpage de l'uri par un /
     private $uri;
 
-    //Réprésente la clé de config testé actuellement
+    //Tableau représentant la clé de config testé actuellement par un /
     private $route;
 
     //Le nom du controller a charger
@@ -44,40 +44,21 @@ class Routing{
 
     /**
      * Cette méthode retourne une chaîne de caractère correspondant au contrôleur en cours de test
-     * @return object Le contrôleur à retourner en fonction de l'URI
      */
-    private function getValue(string $key){
+    private function getValue($value){
 
-        return $this->config[$key];
+        return !is_array($value) ? $value : $value[$this->method];
 
     }
 
     /**
-     * Cette méthode ajoute les éléments variable de l'uri au tableau $args
+     * Cette méthode vérifie l'élément de $route qui corrspond a l'index passer, l'ajoute args si c'est bien un élément variable et sinon retourne false
      * @param int L'index de l'élément du tableau $uri a passer a $args
      */
     private function addArgument(int $index){
 
-        if($route[$index] == "(:)") array_push($args, $uri[$index]);
-    }
+        return ($this->route[$index] == "(:)") ? array_push($this->args, $this->uri[$index]) : false;
 
-    /**
-     * Cette méthode compare les tableaux $uri et $route
-     * @return bool true si les tableau sont identique et false sinon
-     */
-    private function compare():bool
-    {
-
-        for($i = 0 ; $i < count($this->uri); $i++){
-
-            if($this->uri[$i] != $this->route[$i]){
-
-                if($route[$i] == "(:)") addArgument($i);
-                else return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -85,15 +66,43 @@ class Routing{
      */
     private function invoke(){
 
-        if(is_array($this->controller)) $this->controller = $this->controller[$this->method];
-
         $controllerName = explode(":", $this->controller)[0];
 
         $controllerMethod = explode(":", $this->controller)[1];
 
-        $viewController = new $controllerName();
+        $c = new $controllerName();
 
-        $viewController->{$controllerMethod}($this->args);
+        $c->{$controllerMethod}($this->args);
+
+    }
+
+    /**
+     * Cette méthode compare les tableaux $uri et $route
+     * @return false si les tableau ne sont pas identiques et exécute la fonction invoke si ils le sont
+     */
+    private function compare(){
+
+        for($i = 0 ; $i < count($this->uri); $i++){
+
+            if($this->uri[$i] != $this->route[$i]){
+
+                if(!$this->addArgument($i)) return false;
+
+            }
+        }
+
+        $this->invoke();
+    }
+
+    /**
+     * Supprimme tout les chaînes vide dans $uri et $rout et réinitialize $args
+     */
+    private function sanitize(){
+
+        $this->args = array();
+        array_filter($this->uri);
+        array_filter($this->route);
+
 
     }
 
@@ -106,13 +115,14 @@ class Routing{
 
         foreach($this->config as $key => $value){
 
+            $this->controller = $this->getValue($value);
             $this->route = explode("/", $key);
+            $this->sanitize();
 
             if($this->isEqual()){
-                if($this->compare()){
-                    $this->controller = $this->getValue($key);
-                    $this->invoke();
-                }
+
+                if($this->compare())break;
+
             }
         }
     }

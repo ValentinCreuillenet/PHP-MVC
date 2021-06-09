@@ -1,9 +1,9 @@
 {
-    "driver" : "mysql",
-    "host" : "172.17.0.1",
-    "port" : "3306",
-    "dbname" : "planning_in_love",
-    "username" : "root",
-    "password" : "admin"
+    "driver" : "",
+    "host" : "",
+    "port" : "",
+    "dbname" : "",
+    "username" : "",
+    "password" : ""
 }
    

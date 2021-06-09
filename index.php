@@ -11,3 +11,6 @@ spl_autoload_register(function ($class) {
     endif;
 });
 
+$r = new Routing();
+
+$r->execute();
