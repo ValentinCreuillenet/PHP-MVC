@@ -31,7 +31,13 @@ abstract class Controller{
      * @param $path Le chemin de la vue dans laquelle injecter les données
      * @param $data les données à injecter dans la vue
      */
-    protected function render($path, $data){
+    protected function render(string $pathToFile,array $data){
+
+        foreach($data as $key => $value){
+            $$key = $value;
+        }
+
+        include("./views/{$pathToFile}.php");
 
     }
 

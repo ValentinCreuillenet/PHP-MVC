@@ -28,6 +28,8 @@ class Routing{
 
         $this->method = $_SERVER['REQUEST_METHOD'];
 
+        $this->execute();
+
     }
 
     /**
