@@ -38,7 +38,7 @@ class Routing{
     private function isEqual():bool
     {
 
-        return (count($this->uri) == count($this->route)) ? true : false;
+        return (count($this->uri) == count($this->route));
 
     }
 
@@ -100,7 +100,6 @@ class Routing{
         $this->args = array();
         array_filter($this->uri);
         array_filter($this->route);
-
 
     }
 
